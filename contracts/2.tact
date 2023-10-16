@@ -29,8 +29,8 @@ contract Task2 with Deployable {
     require(sender() == self.admin, "Only deployer is allowed to refund");
     send(SendParameters{
         to: msg.sender,
-        value: context().value,
-        mode: SendIgnoreErrors,
+        value: 0,
+        mode: SendRemainingValue + SendIgnoreErrors,
         body: beginCell().endCell()
     });
   }
@@ -39,7 +39,7 @@ contract Task2 with Deployable {
     send(SendParameters{
         to: self.admin,
         value: 0,
-        mode: SendIgnoreErrors,
+        mode: SendRemainingValue + SendIgnoreErrors,
         body: beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell()
     });
   }
