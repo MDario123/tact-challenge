@@ -7,14 +7,9 @@ import "@stdlib/deploy";
   You also need to implement one getter with the name "counter" to get the current number from the state.
 */
 
-message Add {
+message In {
   queryId: Int as uint64;
-  number: Int as uint32;
-}
-
-message Subtract {
-  queryId: Int as uint64;
-  number: Int as uint32;
+  number: Int as int32;
 }
 
 contract Task1 with Deployable {
@@ -24,11 +19,11 @@ contract Task1 with Deployable {
       self.counter = 0;
     }
 
-    receive(msg: Add) {
+    receive(msg: In) {
       self.counter = self.counter + msg.number;
     }
     
-    receive(msg: Subtract) {
+    receive(msg: In) {
       self.counter = self.counter - msg.number;
     }
 
