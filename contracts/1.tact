@@ -8,7 +8,6 @@ import "@stdlib/deploy";
 */
 
 message In {
-  queryId: Int as uint64;
   number: Int as int32;
 }
 
