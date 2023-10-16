@@ -30,7 +30,7 @@ contract Task2 with Deployable {
         to: msg.sender,
         value: context().value,
         mode: 0,
-        body: beginCell().endcell()
+        body: beginCell().endCell()
     });
   }
 
