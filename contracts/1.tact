@@ -8,11 +8,11 @@ import "@stdlib/deploy";
 */
 
 message Add {
-  number: Int as int32;
+  number: Int as uint32;
 }
 
 message Sub {
-  number: Int as int32;
+  number: Int as uint32;
 }
 
 contract Task1 with Deployable {
