@@ -85,7 +85,7 @@ contract Task3 with Deployable {
             forwardTonAmount: ton("0.01"),
             forwardPayload: emptySlice()
           }.toCell()
-        );
+        });
     } else {
       // Assume sender is jettonA
       let thisAddress: Address = self.jettonAddressA;
@@ -122,7 +122,7 @@ contract Task3 with Deployable {
             forwardTonAmount: ton("0.01"),
             forwardPayload: emptySlice()
           }.toCell()
-        );
+        });
 
       } else {
         // Take payment and send jettons for client
@@ -143,7 +143,7 @@ contract Task3 with Deployable {
             forwardTonAmount: ton("0.01"),
             forwardPayload: emptySlice()
           }.toCell()
-        );
+        });
 
         send(SendParameters{
           to: otherAddress,
@@ -159,7 +159,7 @@ contract Task3 with Deployable {
             forwardTonAmount: ton("0.01"),
             forwardPayload: emptySlice()
           }.toCell()
-        );
+        });
 
         // Update known amounts
         if (sender() == self.jettonAddressA) {
