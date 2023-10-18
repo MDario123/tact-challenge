@@ -95,13 +95,13 @@ contract Task3 with Deployable {
         send(SendParameters{
           to: sender(),
           value: ton("0.01"), 
-          mode: 2, 
+          mode: SendIgnoreErrors, 
           bounce: true, 
           body: TokenTransfer{
-            queryId: 0,
+            queryId: msg.queryId,
             amount: msg.amount,
             destination: msg.from,
-            responseDestination: myAddress(),
+            responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: ton("0.01"),
             forwardPayload: emptySlice()
@@ -114,22 +114,6 @@ contract Task3 with Deployable {
         thisAmount = thisAmount + msg.amount;
 
         send(SendParameters{
-          to: thisAddress,
-          value: ton("0.01"), 
-          mode: 2, 
-          bounce: true, 
-          body: TokenTransfer{
-            queryId: 0,
-            amount: msg.amount,
-            destination: self.owner,
-            responseDestination: myAddress(),
-            customPayload: null,
-            forwardTonAmount: ton("0.01"),
-            forwardPayload: emptySlice()
-          }.toCell()
-        });
-
-        send(SendParameters{
           to: otherAddress,
           value: ton("0.01"), 
           mode: 2, 
@@ -138,7 +122,7 @@ contract Task3 with Deployable {
             queryId: 0,
             amount: want,
             destination: msg.from,
-            responseDestination: myAddress(),
+            responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: ton("0.01"),
             forwardPayload: emptySlice()
