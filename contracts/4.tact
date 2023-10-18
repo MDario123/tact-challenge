@@ -40,7 +40,14 @@ contract Task4 with Deployable {
         value: 0, 
         mode: SendRemainingValue + SendIgnoreErrors, 
         bounce: true, 
-        body: beginCell().storeUint(0x5fcc3d14, 32).storeUint(msg.queryId, 64).storeAddress(msg.prevOwner).storeAddress(msg.prevOwner).storeCoins(0).endCell()
+        body: body: Transfer {
+          queryId: msg.queryId,           
+          newOwner: msg.prevOwner,
+          responseDestination: msg.prevOwner,
+          customPayload: null, 
+          forwardAmount: 0,
+          forwardPayload: emptySlice() 
+        }.toCell()
       });
     } else {
       self.timeEnd = msg.forwardPayload.loadUint(32) + now();
