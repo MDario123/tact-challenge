@@ -95,7 +95,7 @@ contract Task4 with Deployable {
         bounce: true, 
         body: Transfer {
           queryId: 0,           
-          newOwner: self.ownerAddress,
+          newOwner: self.ownerAddress!!,
           responseDestination: myAddress(),
           customPayload: null, 
           forwardAmount: ton("0.1"),
