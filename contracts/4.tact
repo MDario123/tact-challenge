@@ -64,7 +64,7 @@ contract Task4 with Deployable {
       send(SendParameters{
         to: sender(),
         value: 0, 
-        mode: SendRemainingBalance + SendIgnoreErrors, 
+        mode: SendRemainingValue + SendIgnoreErrors, 
         bounce: true, 
         body: Transfer {
           queryId: msg.queryId,           
