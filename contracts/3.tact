@@ -68,7 +68,7 @@ contract Task3 with Deployable {
   }
 
   receive(msg: TokenNotification) {
-    require((sender() == self.jettonAddressA) || (sender() == self.jettonAddressB), "unknown sender address");
+    //require((sender() == self.jettonAddressA) || (sender() == self.jettonAddressB), "unknown sender address");
 
     if (msg.from == self.owner) {
       if (sender() == self.jettonAddressA) {
