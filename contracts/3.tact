@@ -76,6 +76,84 @@ contract Task3 with Deployable {
       } else {
         self.bAmount = self.bAmount + msg.amount;
       }
+    } else {
+      if (sender() == self.jettonAddressA) {
+        let want: Int = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
+        if (self.bAmount < want) {
+          send(SendParameters{
+            to: sender(),
+            value: 0, 
+            mode: 66, 
+            bounce: true, 
+            body: TokenTransfer {
+              queryId: 0,
+              amount: msg.amount,
+              destination: msg.from,
+              responseDestination: myAddress(),
+              customPayload: null,
+              forwardTonAmount: ton("0.01"),
+              forwardPayload: emptySlice()
+            }
+          });
+        } else {
+          self.aAmount = self.aAmount + msg.amount;
+          self.bAmount = self.bAmount - want;
+
+          send(SendParameters{
+            to: self.jettonAddressB,
+            value: 0, 
+            mode: 66, 
+            bounce: true, 
+            body: TokenTransfer {
+              queryId: 0,
+              amount: want,
+              destination: msg.from,
+              responseDestination: myAddress(),
+              customPayload: null,
+              forwardTonAmount: ton("0.01"),
+              forwardPayload: emptySlice()
+            }
+          });
+        }
+      } else {
+        let want: Int = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
+        if (self.aAmount < want) {
+          send(SendParameters{
+            to: sender(),
+            value: 0, 
+            mode: 66, 
+            bounce: true, 
+            body: TokenTransfer {
+              queryId: 0,
+              amount: msg.amount,
+              destination: msg.from,
+              responseDestination: myAddress(),
+              customPayload: null,
+              forwardTonAmount: ton("0.01"),
+              forwardPayload: emptySlice()
+            }
+          });
+        } else {
+          self.bAmount = self.bAmount + msg.amount;
+          self.aAmount = self.aAmount - want;
+
+          send(SendParameters{
+            to: self.jettonAddressA,
+            value: 0, 
+            mode: 66, 
+            bounce: true, 
+            body: TokenTransfer {
+              queryId: 0,
+              amount: want,
+              destination: msg.from,
+              responseDestination: myAddress(),
+              customPayload: null,
+              forwardTonAmount: ton("0.01"),
+              forwardPayload: emptySlice()
+            }
+          });
+        }
+      }
     }
   } 
   
