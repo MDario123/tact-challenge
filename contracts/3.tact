@@ -70,7 +70,14 @@ contract Task3 with Deployable {
   receive(msg: TokenNotification) {
     require((sender() == self.jettonAddressA) || (sender() == self.jettonAddressB), "unknown sender address");
 
-    if (msg.from != self.owner) {
+    if (msg.from == self.owner) {
+      if (sender() == self.jettonAddressA) {
+        self.aAmount = self.aAmount + msg.amount;
+      } else {
+        self.bAmount = self.bAmount + msg.amount;
+      }
+    }
+    else {
       // Assume sender is jettonA
       let thisAddress: Address = self.jettonAddressA;
       let otherAddress: Address = self.jettonAddressB;
@@ -101,7 +108,7 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: msg.amount,
             destination: msg.from,
-            responseDestination: msg.from,
+            responseDestination: myAddress(),
             customPayload: null,
             forwardTonAmount: ton("0.01"),
             forwardPayload: emptySlice()
@@ -122,7 +129,7 @@ contract Task3 with Deployable {
             queryId: 0,
             amount: want,
             destination: msg.from,
-            responseDestination: msg.from,
+            responseDestination: myAddress(),
             customPayload: null,
             forwardTonAmount: ton("0.01"),
             forwardPayload: emptySlice()
