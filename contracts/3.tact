@@ -101,8 +101,8 @@ contract Task3 with Deployable {
         // Return jettons
         send(SendParameters{
           to: sender(),
-          value: ton("0.01"), 
-          mode: SendIgnoreErrors, 
+          value: 0, 
+          mode: 66, 
           bounce: true, 
           body: TokenTransfer{
             queryId: 0,
@@ -122,8 +122,8 @@ contract Task3 with Deployable {
 
         send(SendParameters{
           to: otherAddress,
-          value: ton("0.01"), 
-          mode: 2, 
+          value: 0, 
+          mode: 66, 
           bounce: true, 
           body: TokenTransfer{
             queryId: 0,
