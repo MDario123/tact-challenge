@@ -67,9 +67,9 @@ contract Task4 with Deployable {
         mode: SendRemainingBalance + SendIgnoreErrors, 
         bounce: true, 
         body: Transfer {
-          queryId: 0,           
+          queryId: msg.queryId,           
           newOwner: msg.prevOwner,
-          responseDestination: myAddress(),
+          responseDestination: msg.prevOwner,
           customPayload: null, 
           forwardAmount: 0,
           forwardPayload: emptyCell().asSlice()
@@ -95,8 +95,8 @@ contract Task4 with Deployable {
         bounce: true, 
         body: Transfer {
           queryId: 0,           
-          newOwner: self.ownerAddress!!,
-          responseDestination: myAddress(),
+          newOwner: sender(),
+          responseDestination: sender(),
           customPayload: null, 
           forwardAmount: 0,
           forwardPayload: emptyCell().asSlice()
