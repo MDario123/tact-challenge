@@ -70,23 +70,7 @@ contract Task3 with Deployable {
   receive(msg: TokenNotification) {
     require((sender() == self.jettonAddressA) || (sender() == self.jettonAddressB), "unknown sender address");
 
-    if (msg.from == self.owner) {
-      send(SendParameters{
-          to: sender(),
-          value: ton("0.01"), 
-          mode: 2, 
-          bounce: true, 
-          body: TokenTransfer{
-            queryId: 0,
-            amount: msg.amount,
-            destination: msg.from,
-            responseDestination: myAddress(),
-            customPayload: null,
-            forwardTonAmount: ton("0.01"),
-            forwardPayload: emptySlice()
-          }.toCell()
-        });
-    } else {
+    if (msg.from != self.owner) {
       // Assume sender is jettonA
       let thisAddress: Address = self.jettonAddressA;
       let otherAddress: Address = self.jettonAddressB;
