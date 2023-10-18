@@ -110,7 +110,11 @@ contract Task4 with Deployable {
   }
 
   get fun time(): Int {
-    return (self.timeEnd > now()) & (self.timeEnd - now());
+    if (self.timeEnd > now()) {
+      return self.timeEnd - now();  
+    } else {
+      return 0;
+    }
   }
 
   get fun nft(): Address? {
