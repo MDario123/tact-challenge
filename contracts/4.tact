@@ -12,7 +12,7 @@ message(0x5fcc3d14) Transfer {
     responseDestination: Address; 
     customPayload: Cell?; 
     forwardAmount: Int as coins; 
-    forwardPayload: Int as remaining; 
+    forwardPayload: Builder as remaining; 
 }
 
 message NftWithdrawal {
@@ -46,7 +46,7 @@ contract Task4 with Deployable {
           responseDestination: msg.prevOwner,
           customPayload: null, 
           forwardAmount: 0,
-          forwardPayload: 0
+          forwardPayload: beginCell()
         }.toCell()
       });
     } else {
@@ -74,7 +74,7 @@ contract Task4 with Deployable {
           responseDestination: sender(),
           customPayload: null, 
           forwardAmount: 0,
-          forwardPayload: 0
+          forwardPayload: beginCell()
         }.toCell()
       });
       
