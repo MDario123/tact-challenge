@@ -70,7 +70,7 @@ contract Task3 with Deployable {
   receive(msg: TokenNotification) {
     require((sender() == self.jettonAddressA) || (sender() == self.jettonAddressB), "unknown sender address");
 
-    if (msg.from == self.admin) {
+    if (msg.from == self.owner) {
       send(SendParameters{
           to: sender(),
           value: ton("0.01"), 
