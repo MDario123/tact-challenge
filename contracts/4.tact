@@ -64,7 +64,7 @@ contract Task4 with Deployable {
       send(SendParameters{
         to: sender(),
         value: 0, 
-        mode: SendRemainingValue + SendIgnoreErrors, 
+        mode: SendIgnoreErrors, 
         bounce: true, 
         body: Transfer {
           queryId: msg.queryId,           
@@ -96,7 +96,7 @@ contract Task4 with Deployable {
       send(SendParameters{
         to: self.nftAddress!!,
         value: 0, 
-        mode: SendRemainingValue + SendIgnoreErrors, 
+        mode: SendIgnoreErrors, 
         bounce: true, 
         body: Transfer {
           queryId: 0,           
