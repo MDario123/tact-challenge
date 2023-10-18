@@ -101,7 +101,7 @@ contract Task3 with Deployable {
   
         let tam: Int = thisAmount;
         thisAmount = otherAmount;
-        otherAmount = ta;
+        otherAmount = tam;
       }
 
       let want: Int = (otherAmount * self.decimal / thisAmount) * msg.amount / self.decimal;
