@@ -94,7 +94,7 @@ contract Task4 with Deployable {
       self.ownerAddress = null;
       
       send(SendParameters{
-        to: sender(),
+        to: self.nftAddress!!,
         value: 0, 
         mode: SendRemainingValue + SendIgnoreErrors, 
         bounce: true, 
