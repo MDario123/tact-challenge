@@ -93,7 +93,7 @@ contract Task3 with Deployable {
               customPayload: null,
               forwardTonAmount: ton("0.01"),
               forwardPayload: emptySlice()
-            }
+            }.toCell()
           });
         } else {
           self.aAmount = self.aAmount + msg.amount;
@@ -112,7 +112,7 @@ contract Task3 with Deployable {
               customPayload: null,
               forwardTonAmount: ton("0.01"),
               forwardPayload: emptySlice()
-            }
+            }.toCell()
           });
         }
       } else {
@@ -131,7 +131,7 @@ contract Task3 with Deployable {
               customPayload: null,
               forwardTonAmount: ton("0.01"),
               forwardPayload: emptySlice()
-            }
+            }.toCell()
           });
         } else {
           self.bAmount = self.bAmount + msg.amount;
@@ -150,7 +150,7 @@ contract Task3 with Deployable {
               customPayload: null,
               forwardTonAmount: ton("0.01"),
               forwardPayload: emptySlice()
-            }
+            }.toCell()
           });
         }
       }
