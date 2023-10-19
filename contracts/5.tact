@@ -97,7 +97,7 @@ contract Task5 with Deployable {
             newOwner: sender(),
             responseDestination: sender(),
             customPayload: null, 
-            forwardAmount: 0,
+            forwardAmount: ton("0.08"),
             forwardPayload: emptySlice() 
           }.toCell()
         });
