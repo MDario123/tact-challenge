@@ -48,21 +48,22 @@ contract Task5 with Deployable {
       if(context().value > context().readForwardFee()) {
         if(context().value >= ton("2.1")) {
           nativeReserve(myBalance() - context().value + ton("2.0"), 0);
+        } else {
+          send(SendParameters{
+            to: sender(),
+            value: 0, 
+            mode: 64, 
+            bounce: true, 
+            body: Transfer {
+              queryId: msg.queryId,           
+              newOwner: msg.prevOwner,
+              responseDestination: msg.prevOwner,
+              customPayload: null, 
+              forwardAmount: 0,
+              forwardPayload: emptySlice() 
+            }.toCell()
+          });
         }
-        send(SendParameters{
-        to: sender(),
-          value: 0, 
-          mode: 64, 
-          bounce: true, 
-          body: Transfer {
-            queryId: msg.queryId,           
-            newOwner: msg.prevOwner,
-            responseDestination: msg.prevOwner,
-            customPayload: null, 
-            forwardAmount: 0,
-            forwardPayload: emptySlice() 
-          }.toCell()
-        });
       }
     }
   }
