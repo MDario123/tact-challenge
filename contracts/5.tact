@@ -54,6 +54,27 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalAllNFTs) {
     require(context().value >= (ton("1.0") + self.NFTamount * ton("0.8")), "Insufficent funds");
     require(sender() == self.owner, "Invalid sender");
+
+    let amount: Int = self.NFTamount;
+    while (amount) {
+      amount = amount - 1;
+      send(SendParameters{
+        to: self.myNFTs.get(amount)!!,
+        value: ton("0.8"), 
+        mode: 0, 
+        bounce: true, 
+        body: Transfer {
+          queryId: 0,           
+          newOwner: sender(),
+          responseDestination: sender(),
+          customPayload: null, 
+          forwardAmount: 0,
+          forwardPayload: emptySlice() 
+        }.toCell()
+      });
+    }
+    self.myNFTs = emptyMap();
+    self.NFTamount = 0;
   }
 
   get fun profit(): Int { 
