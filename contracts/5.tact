@@ -93,7 +93,7 @@ contract Task5 with Deployable {
           mode: SendIgnoreErrors, 
           bounce: true, 
           body: Transfer {
-            queryId: msg.quryId,           
+            queryId: msg.queryId,           
             newOwner: sender(),
             responseDestination: sender(),
             customPayload: null, 
