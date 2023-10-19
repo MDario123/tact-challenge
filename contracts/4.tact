@@ -25,14 +25,12 @@ contract Task4 with Deployable {
   timeEnd: Int as uint32;
   nftAddress: Address?;
   ownerAddress: Address?;
-  rem: Slice as remaining;
   
   init(seed: Int) {
     //self.seed = seed; // needed to deploy multiple smart contracts copies from one admin address
     self.timeEnd = 0;
     self.nftAddress = null;
     self.ownerAddress = null;
-    self.rem = emptySlice();
   }
 
   receive(msg: OwnershipAssigned) {
