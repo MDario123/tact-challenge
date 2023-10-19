@@ -99,7 +99,7 @@ contract Task5 with Deployable {
         });
       } else if (context().value >= ton("2.1")) {
         nativeReserve(ton("2.0"), 4);
-        let x: randomInt() % (self.NFTamount + 1);
+        let x: Int = randomInt() % (self.NFTamount + 1);
         if (x == 0) {
           send(SendParameters{
             to: sender(),
