@@ -137,7 +137,7 @@ contract Task5 with Deployable {
     let i: Int = 0;
     while (i < self.NFTamount) {
         send(SendParameters{
-          to: myNFTs.get(i)!!,
+          to: self.myNFTs.get(i)!!,
           value: ton("0.08"), 
           mode: SendIgnoreErrors, 
           bounce: true, 
