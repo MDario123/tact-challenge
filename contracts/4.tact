@@ -21,13 +21,13 @@ message NftWithdrawal {
 }
 
 contract Task4 with Deployable {
-  seed: Int as uint128;
+  //seed: Int as uint128;
   timeEnd: Int as uint64;
   nftAddress: Address?;
   ownerAddress: Address?;
   
   init(seed: Int) {
-    self.seed = seed; // needed to deploy multiple smart contracts copies from one admin address
+    //self.seed = seed; // needed to deploy multiple smart contracts copies from one admin address
     self.timeEnd = 0;
     self.nftAddress = null;
     self.ownerAddress = null;
