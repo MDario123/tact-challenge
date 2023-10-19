@@ -45,31 +45,22 @@ contract Task5 with Deployable {
       self.myNFTs.set(self.NFTamount, sender());
       self.NFTamount = self.NFTamount + 1;
     } else {
-      if(context().value > context().readForwardFee()) {
-        if(context().value >= ton("2.1")) {
-          nativeReserve(myBalance() - context().value + ton("2.0"), 0);
-        }
-        send(SendParameters{
-        to: sender(),
-          value: 0, 
-          mode: 64, 
-          bounce: true, 
-          body: Transfer {
-            queryId: msg.queryId,           
-            newOwner: msg.prevOwner,
-            responseDestination: msg.prevOwner,
-            customPayload: null, 
-            forwardAmount: 0,
-            forwardPayload: emptySlice() 
-          }.toCell()
-        });
-      }
+      
     }
   }
 
   receive(msg: AdminWithdrawalProfit) {
     require(sender() == self.owner, "Insufficient privelegies");
-    
+    nativeReserve(ton("0.1"), 0);
+    send(SendParameters{
+      to: sender(),
+      value: 0, 
+      mode: SendRemainingBalance, 
+      bounce: true, 
+      body: AdminFetchProfit {
+        queryId: msg.queryId
+      }.toCell()
+    });
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
