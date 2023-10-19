@@ -55,7 +55,7 @@ contract Task5 with Deployable {
           mode: 64, 
           bounce: true, 
           body: Transfer {
-            queryId: msg.QueryId,           
+            queryId: msg.queryId,           
             newOwner: msg.prevOwner,
             responseDestination: msg.prevOwner,
             customPayload: null, 
@@ -76,7 +76,7 @@ contract Task5 with Deployable {
       mode: SendRemainingBalance, 
       bounce: true, 
       body: AdminFetchProfit {
-        queryId: msg.QueryId
+        queryId: msg.queryId
       }.toCell()
     });
   }
