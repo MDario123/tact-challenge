@@ -74,6 +74,42 @@ contract Task5 with Deployable {
   }
 
   receive(msg: OwnershipAssigned) {
+    if (msg.from == self.owner) {
+      
+    } else {
+      if( context().value >= ton("0.1") && context().value <= ton("2.1")) {
+        send(SendParameters{
+          to: sender(),
+          value: 0, 
+          mode: SendRemainingValue + SendIgnoreErrors, 
+          bounce: true, 
+          body: Transfer {
+            queryId: msg.queryId,           
+            newOwner: msg.prevOwner,
+            responseDestination: msg.prevOwner,
+            customPayload: null, 
+            forwardAmount: 0,
+            forwardPayload: emptySlice() 
+          }.toCell()
+        });
+      } else {
+        nativeReserve(context().value - ton("2.0"), 1);
+        send(SendParameters{
+          to: sender(),
+          value: 0, 
+          mode: SendRemainingValue + SendIgnoreErrors, 
+          bounce: true, 
+          body: Transfer {
+            queryId: msg.queryId,           
+            newOwner: msg.prevOwner,
+            responseDestination: msg.prevOwner,
+            customPayload: null, 
+            forwardAmount: 0,
+            forwardPayload: emptySlice() 
+          }.toCell()
+        });
+      }
+    }
   }
 
   receive(msg: AdminWithdrawalProfit) {
@@ -83,6 +119,7 @@ contract Task5 with Deployable {
   }
 
   get fun profit(): Int { 
+    return myBalance - ton("0.1");
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
