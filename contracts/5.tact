@@ -123,6 +123,7 @@ contract Task5 with Deployable {
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
-    return emptyMap();
+    let x: map<Int as uint16, Address> = emptyMap();
+    return x;
   }
 }
