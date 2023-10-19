@@ -123,7 +123,7 @@ contract Task5 with Deployable {
           mode: SendRemainingBalance + SendIgnoreErrors, 
           bounce: true, 
           body: AdminFetchProfit {
-            queryId: msg.queryId,           
+            queryId: msg.queryId
           }.toCell()
         });
   }
