@@ -85,12 +85,11 @@ contract Task5 with Deployable {
     require(context().value >= (ton("1.0") + self.NFTamount * ton("0.8")), "Insufficent funds");
     require(sender() == self.owner, "Invalid sender");
 
-    let amount: Int = self.NFTamount;
-    while (amount != 0) {
-      amount = amount - 1;
+    let amount: Int = 0;
+    while (amount < self.NFTamount) {
       send(SendParameters{
         to: self.myNFTs.get(amount)!!,
-        value: ton("0.1"), 
+        value: ton("0.02"), 
         mode: 2, 
         bounce: true, 
         body: Transfer {
@@ -102,6 +101,7 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
+      amount = amount + 1;
     }
     self.myNFTs = emptyMap();
     self.NFTamount = 0;
