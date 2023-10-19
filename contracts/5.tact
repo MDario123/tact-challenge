@@ -67,10 +67,12 @@ message(0x5fcc3d14) Transfer {
 contract Task5 with Deployable {
   seed: Int as uint128;
   owner: Address;
+  myNFTs: map<Int as uint16, Address>;
   
   init(seed: Int, owner: Address) {
     self.owner = owner;
     self.seed = seed; // needed to deploy multiple smart contracts copies from one admin address
+    self.myNFTs = emptyMap();
   }
 
   receive(msg: OwnershipAssigned) {
@@ -123,7 +125,6 @@ contract Task5 with Deployable {
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
-    let x: map<Int as uint16, Address> = emptyMap();
-    return x;
+    return self.myNFTs;
   }
 }
