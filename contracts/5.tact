@@ -49,6 +49,16 @@ contract Task5 with Deployable {
 
   receive(msg: AdminWithdrawalProfit) {
     require(sender() == self.owner, "Insufficient privelegies");
+    nativeReserve(ton("0.1"), 0);
+    send(SendParameters{
+      to: sender(),
+      value: 0, 
+      mode: SendRemainingBalance, 
+      bounce: true, 
+      body: AdminFetchProfit {
+        queryId: 0
+      }.toCell()
+    });
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
@@ -60,15 +70,15 @@ contract Task5 with Deployable {
       amount = amount - 1;
       send(SendParameters{
         to: self.myNFTs.get(amount)!!,
-        value: ton("0.4"), 
+        value: ton("0.7"), 
         mode: 0, 
         bounce: false, 
         body: Transfer {
-          queryId: msg.queryId,           
+          queryId: 0,           
           newOwner: sender(),
           responseDestination: sender(),
           customPayload: null, 
-          forwardAmount: ton("0.01"),
+          forwardAmount: 0,
           forwardPayload: emptySlice() 
         }.toCell()
       });
