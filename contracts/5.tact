@@ -98,7 +98,7 @@ contract Task5 with Deployable {
           }.toCell()
         });
       } else if (context().value >= ton("2.1")) {
-        nativeReserve(context().value - ton("2.0"), 1);
+        nativeReserve(ton("2.0"), 4);
         let x: randomInt() % (self.NFTamount + 1);
         if (x == 0) {
           send(SendParameters{
