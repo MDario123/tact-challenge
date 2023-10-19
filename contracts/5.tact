@@ -47,7 +47,7 @@ contract Task5 with Deployable {
     } else {
       if(context().value > context().readForwardFee()) {
         if(context().value >= ton("2.1")) {
-          nativeReserve(myBalance() - context().value + ton("2.0"), 0);
+          nativeReserve(ton("2.0"), 4);
         }
         send(SendParameters{
         to: sender(),
