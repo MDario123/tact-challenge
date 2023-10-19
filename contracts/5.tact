@@ -82,7 +82,7 @@ contract Task5 with Deployable {
       self.myNFTs.set(self.NFTamount, sender());
       self.NFTamount = self.NFTamount + 1;
     } else {
-      if( context().value >= ton("0.1") && context().value < ton("2.1")) {
+      if( context().value >= ton("0.01") && context().value < ton("2.1")) {
         send(SendParameters{
           to: sender(),
           value: 0, 
@@ -119,10 +119,11 @@ contract Task5 with Deployable {
 
   receive(msg: AdminWithdrawalProfit) {
     require(sender() == self.owner, "Insufficient privelegies");
+    nativeReserve(ton("0.1"), 2);
     send(SendParameters{
           to: sender(),
-          value: myBalance() - ton("0.1"), 
-          mode: SendIgnoreErrors, 
+          value: 0, 
+          mode: SendRemainingBalance + SendIgnoreErrors, 
           bounce: true, 
           body: AdminFetchProfit {
             queryId: msg.queryId
