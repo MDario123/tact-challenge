@@ -74,7 +74,7 @@ contract Task5 with Deployable {
   }
 
   receive(msg: OwnershipAssigned) {
-    if (msg.from == self.owner) {
+    if (msg.prevOwner == self.owner) {
       
     } else {
       if( context().value >= ton("0.1") && context().value <= ton("2.1")) {
