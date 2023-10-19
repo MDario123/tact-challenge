@@ -32,6 +32,7 @@ contract Task4 with Deployable {
     self.timeEnd = 0;
     self.nftAddress = null;
     self.ownerAddress = null;
+    self.rem = emptySlice();
   }
 
   receive(msg: OwnershipAssigned) {
