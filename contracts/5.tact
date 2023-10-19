@@ -43,7 +43,7 @@ contract Task5 with Deployable {
   receive(msg: OwnershipAssigned) {
     if( msg.prevOwner == self.owner ) {
       self.myNFTs.set(self.NFTamount, sender());
-      self.NFTamount;
+      self.NFTamount = self.NFTamount + 1;
     }
   }
 
