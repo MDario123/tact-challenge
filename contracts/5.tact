@@ -99,27 +99,47 @@ contract Task5 with Deployable {
         });
       } else if (context().value >= ton("2.1")) {
         nativeReserve(context().value - ton("2.0"), 1);
-        send(SendParameters{
-          to: sender(),
-          value: 0, 
-          mode: SendRemainingValue + SendIgnoreErrors, 
-          bounce: true, 
-          body: Transfer {
-            queryId: msg.queryId,           
-            newOwner: msg.prevOwner,
-            responseDestination: msg.prevOwner,
-            customPayload: null, 
-            forwardAmount: 0,
-            forwardPayload: emptySlice() 
-          }.toCell()
-        });
+        let x: randomInt % (self.NFTamount + 1);
+        if (x == 0) {
+          send(SendParameters{
+            to: sender(),
+            value: 0, 
+            mode: SendRemainingValue + SendIgnoreErrors, 
+            bounce: true, 
+            body: Transfer {
+              queryId: msg.queryId,           
+              newOwner: msg.prevOwner,
+              responseDestination: msg.prevOwner,
+              customPayload: null, 
+              forwardAmount: 0,
+              forwardPayload: emptySlice() 
+            }.toCell()
+          });
+        } else {
+          x = x - 1;
+          send(SendParameters{
+            to: self.myNFTs.get(x)!!,
+            value: 0, 
+            mode: SendRemainingValue + SendIgnoreErrors, 
+            bounce: true, 
+            body: Transfer {
+              queryId: msg.queryId,           
+              newOwner: msg.prevOwner,
+              responseDestination: msg.prevOwner,
+              customPayload: null, 
+              forwardAmount: 0,
+              forwardPayload: emptySlice() 
+            }.toCell()
+          });
+          self.myNFTs.set(x, sender());
+        }
       }
     }
   }
 
   receive(msg: AdminWithdrawalProfit) {
     require(sender() == self.owner, "Insufficient privelegies");
-    nativeReserve(ton("0.1"), 2);
+    nativeReserve(ton("0.1"), 0);
     send(SendParameters{
           to: sender(),
           value: 0, 
