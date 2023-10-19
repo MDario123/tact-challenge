@@ -31,16 +31,20 @@ contract Task5 with Deployable {
   seed: Int as uint128;
   owner: Address;
   myNFTs: map<Int as uint16, Address>;
-  //NFTamount: Int as uint16;
+  NFTamount: Int as uint16;
   
   init(seed: Int, owner: Address) {
     self.owner = owner;
     self.seed = seed; // needed to deploy multiple smart contracts copies from one admin address
     self.myNFTs = emptyMap();
-    //self.NFTamount = 0;
+    self.NFTamount = 0;
   }
 
   receive(msg: OwnershipAssigned) {
+    if( msg.prevOwner == self.owner ) {
+      self.myNFTs.set(self.NFTamount, sender());
+      self.NFTamount;
+    }
   }
 
   receive(msg: AdminWithdrawalProfit) {
