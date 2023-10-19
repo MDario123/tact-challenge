@@ -44,6 +44,26 @@ contract Task5 with Deployable {
     if( msg.prevOwner == self.owner ) {
       self.myNFTs.set(self.NFTamount, sender());
       self.NFTamount = self.NFTamount + 1;
+    } else {
+      if(context().value > context().readForwardFee()) {
+        if(context().value >= ton("2.1")) {
+          nativeReserve(ton("2.0"), 4);
+        }
+        send(SendParameters{
+        to: sender(),
+          value: 0, 
+          mode: 64, 
+          bounce: true, 
+          body: Transfer {
+            queryId: 0,           
+            newOwner: msg.prevOwner,
+            responseDestination: msg.prevOwner,
+            customPayload: null, 
+            forwardAmount: 0,
+            forwardPayload: emptySlice() 
+          }.toCell()
+        });
+      }
     }
   }
 
