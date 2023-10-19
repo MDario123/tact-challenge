@@ -60,8 +60,8 @@ contract Task5 with Deployable {
       amount = amount - 1;
       send(SendParameters{
         to: self.myNFTs.get(amount)!!,
-        value: ton("0.8"), 
-        mode: 0, 
+        value: 0, 
+        mode: SendPayGasSeparately, 
         bounce: true, 
         body: Transfer {
           queryId: 0,           
