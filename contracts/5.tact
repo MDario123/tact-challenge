@@ -82,7 +82,10 @@ contract Task5 with Deployable {
       self.myNFTs.set(self.NFTamount, sender());
       self.NFTamount = self.NFTamount + 1;
     } else {
-      if( context().value >= ton("0.01") && context().value < ton("2.1")) {
+      if (context().value >= ton("2.1")) {
+        nativeReserve(ton("2.0"), 4);
+      }
+      if( context().value >= ton("0.01")) {
         send(SendParameters{
           to: sender(),
           value: 0, 
@@ -97,42 +100,6 @@ contract Task5 with Deployable {
             forwardPayload: emptySlice() 
           }.toCell()
         });
-      } else if (context().value >= ton("2.1")) {
-        nativeReserve(ton("2.0"), 4);
-        let x: Int = randomInt() % (self.NFTamount + 1);
-        if (x == 0) {
-          send(SendParameters{
-            to: sender(),
-            value: 0, 
-            mode: SendRemainingValue + SendIgnoreErrors, 
-            bounce: true, 
-            body: Transfer {
-              queryId: msg.queryId,           
-              newOwner: msg.prevOwner,
-              responseDestination: msg.prevOwner,
-              customPayload: null, 
-              forwardAmount: 0,
-              forwardPayload: emptySlice() 
-            }.toCell()
-          });
-        } else {
-          x = x - 1;
-          send(SendParameters{
-            to: self.myNFTs.get(x)!!,
-            value: 0, 
-            mode: SendRemainingValue + SendIgnoreErrors, 
-            bounce: true, 
-            body: Transfer {
-              queryId: msg.queryId,           
-              newOwner: msg.prevOwner,
-              responseDestination: msg.prevOwner,
-              customPayload: null, 
-              forwardAmount: 0,
-              forwardPayload: emptySlice() 
-            }.toCell()
-          });
-          self.myNFTs.set(x, sender());
-        }
       }
     }
   }
@@ -141,14 +108,14 @@ contract Task5 with Deployable {
     require(sender() == self.owner, "Insufficient privelegies");
     nativeReserve(ton("0.1"), 0);
     send(SendParameters{
-          to: sender(),
-          value: 0, 
-          mode: SendRemainingBalance + SendIgnoreErrors, 
-          bounce: true, 
-          body: AdminFetchProfit {
-            queryId: msg.queryId
-          }.toCell()
-        });
+      to: sender(),
+      value: 0, 
+      mode: SendRemainingBalance + SendIgnoreErrors, 
+      bounce: true, 
+      body: AdminFetchProfit {
+        queryId: msg.queryId
+      }.toCell()
+    });
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
