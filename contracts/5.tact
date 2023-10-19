@@ -48,10 +48,11 @@ contract Task5 with Deployable {
   }
 
   receive(msg: AdminWithdrawalProfit) {
-    
+    require(sender() == self.owner, "Insufficient privelegies");
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
+    require(context().value >= (ton("1.0") + self.NFTamount * ton("0.8")), "Insufficent funds");
   }
 
   get fun profit(): Int { 
