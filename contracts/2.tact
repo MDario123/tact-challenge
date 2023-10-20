@@ -33,7 +33,7 @@ contract Task2 with Deployable {
         .storeAddress(msg.sender)
         .storeCoins(0)
         .storeInt(0, 1 + 4 + 4 + 64 + 32 + 2)
-      endCell(),
+      .endCell(),
       66 // SendRemainingValue + SendIgnoreErrors
     );
   }
