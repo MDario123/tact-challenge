@@ -48,6 +48,12 @@ contract Task5 with Deployable {
     if( msg.prevOwner == self.owner ) {
       self.myNFTs.set(self.NFTamount, sender());
       self.NFTamount = self.NFTamount + 1;
+      send(SendParameters{
+        to: msg.prevOwner,
+        value: 0, 
+        mode: 64, 
+        bounce: true
+      });
     } else {
     }
   }
