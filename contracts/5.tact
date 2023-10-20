@@ -154,7 +154,6 @@ contract Task5 with Deployable {
         }.toCell()
       });
     } else {
-      self.sending = false;
       send(SendParameters{
         to: self.owner,
         value: 0,
