@@ -27,12 +27,14 @@ contract Task2 with Deployable {
   
   receive(msg: Refund) {
     require(sender() == self.admin, "E");
-    send(SendParameters{
-        to: msg.sender,
-        value: 0,
-        mode: 66, // SendRemainingValue + SendIgnoreErrors
-        body: null
-    });
+    nativeSendMessage(
+      beginCell()
+        .storeInt(0x10, 2) // internal_message + ihd_disabled + bounce + bounce
+        .storeAddress(msg.sender)
+        .storeCoins(0)
+        .storeInt(0, 1 + 4 + 4 + 64 + 32 + 2),
+      66 // SendRemainingValue + SendIgnoreErrors
+    );
   }
 
   receive(msg: Slice) {
