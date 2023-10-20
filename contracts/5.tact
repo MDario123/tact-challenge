@@ -49,49 +49,6 @@ contract Task5 with Deployable {
       self.myNFTs.set(self.NFTamount, sender());
       self.NFTamount = self.NFTamount + 1;
     } else {
-      if(context().value < ton("2.1")) {
-        if(context().value >= context().readForwardFee()) {
-          send(SendParameters{
-            to: sender(),
-            value: 0, 
-            mode: 64, 
-            bounce: true, 
-            body: Transfer {
-              queryId: msg.queryId,           
-              newOwner: msg.prevOwner,
-              responseDestination: msg.prevOwner,
-              customPayload: null, 
-              forwardAmount: 0,
-              forwardPayload: emptySlice() 
-            }.toCell()
-          });
-        }
-        
-      } else {
-        let x: Int = randomInt() % (self.NFTamount + 1);
-        let nft: Address = sender();
-        
-        if (x != 0) {
-          nft = self.myNFTs.get(x - 1)!!;
-          self.myNFTs.set(x - 1, sender());
-        }
-
-        nativeReserve(myBalance() - context().value + ton("2.0"), 0);
-        send(SendParameters{
-          to: nft,
-          value: 0, 
-          mode: 130, 
-          bounce: true, 
-          body: Transfer {
-            queryId: msg.queryId,           
-            newOwner: msg.prevOwner,
-            responseDestination: msg.prevOwner,
-            customPayload: null, 
-            forwardAmount: 0,
-            forwardPayload: emptySlice() 
-          }.toCell()
-        });
-      }
     }
   }
 
@@ -113,59 +70,10 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalAllNFTs) {
     require(context().value >= (ton("1.0") + self.NFTamount * ton("0.08")), "Insufficent funds");
     require(sender() == self.owner, "Invalid sender");
-
-    send(SendParameters{
-      to: myAddress(),
-      value: 0, 
-      mode: 66, 
-      bounce: true, 
-        body: KeepWithdrawing {
-          queryId: 0
-        }.toCell()
-    });
   }
 
   receive(msg: KeepWithdrawing) {
     require(sender() == myAddress(), "Invalid sender");
-
-    let amount: Int = max(0, self.NFTamount - 100);
-    repeat (self.NFTamount - amount) {
-      send(SendParameters{
-        to: self.myNFTs.get(amount)!!,
-        value: ton("0.07"), 
-        mode: 2, 
-        bounce: true, 
-        body: Transfer {
-          queryId: 0,           
-          newOwner: self.owner,
-          responseDestination: self.owner,
-          customPayload: null, 
-          forwardAmount: 0,
-          forwardPayload: emptySlice() 
-        }.toCell()
-      });
-      self.myNFTs.set(amount, null);
-      amount = amount + 1;
-    }
-    self.NFTamount = max(0, self.NFTamount - 100);
-    if (self.NFTamount != 0) {
-      send(SendParameters{
-        to: myAddress(),
-        value: 0, 
-        mode: 64, 
-        bounce: true, 
-        body: KeepWithdrawing {
-          queryId: 0
-        }.toCell()
-      });
-    } else {
-      send(SendParameters{
-        to: self.owner,
-        value: 0, 
-        mode: 64, 
-        bounce: true
-      });
-    }
   }
 
   get fun profit(): Int { 
