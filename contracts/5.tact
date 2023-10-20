@@ -125,10 +125,9 @@ contract Task5 with Deployable {
   receive(msg: KeepWithdrawing) {
     require(sender() == myAddress(), "Invalid sender");
 
-    let amount: Int = max(0, self.NFTamount - 253);
-    repeat (self.NFTamount - amount) {
+    repeat (min(self.NFTamount, 250)) {
       send( SendParameters{
-        to: self.myNFTs.get(amount)!!,
+        to: self.myNFTs.get(self.NFTamount - 1)!!,
         value: ton("0.02"),
         mode: 2,
         bounce: true,
@@ -141,10 +140,9 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
-      self.myNFTs.set(amount, null);
-      amount = amount + 1;
+      self.NFTamount = self.NFTamount - 1;
+      self.myNFTs.set(self.NFTamount, null);
     }
-    self.NFTamount = max(0, self.NFTamount - 253);
     if (self.NFTamount != 0) {
       send(SendParameters{
         to: myAddress(),
@@ -155,7 +153,7 @@ contract Task5 with Deployable {
           queryId: msg.queryId
         }.toCell()
       });
-    }
+    } 
   }
 
   get fun profit(): Int { 
