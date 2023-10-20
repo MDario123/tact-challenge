@@ -36,19 +36,12 @@ contract Task5 with Deployable {
   owner: Address;
   myNFTs: map<Int as uint16, Address>;
   NFTamount: Int as uint16;
-
-  sending: Bool;
-  NFTsending: map<Int as uint16, Address>;
-  NFTamountSending: Int as uint16;
   
   init(seed: Int, owner: Address) {
     self.owner = owner;
     self.seed = seed; // needed to deploy multiple smart contracts copies from one admin address
     self.myNFTs = emptyMap();
     self.NFTamount = 0;
-    self.sending = false;
-    self.NFTsending = emptyMap();
-    self.NFTamountSending = 0;
   }
 
   receive(msg: OwnershipAssigned) {
@@ -119,12 +112,6 @@ contract Task5 with Deployable {
     require(sender() == self.owner, "Invalid sender");
     require(!self.sending, "Busy sending");
 
-    self.sending = true;
-    self.NFTsending = self.myNFTs;
-    self.NFTamountSending = self.NFTamount;
-    self.myNFTs = emptyMap();
-    self.NFTamount = 0;
-    
     send(SendParameters{
       to: myAddress(),
       value: 0,
@@ -139,24 +126,25 @@ contract Task5 with Deployable {
   receive(msg: KeepWithdrawing) {
     require(sender() == myAddress(), "Invalid sender");
 
-    repeat (min(self.NFTamountSending, 250)) {
+    repeat (min(self.NFTamount, 250)) {
+      self.NFTamount = self.NFTamount - 1;
       send( SendParameters{
-        to: self.NFTsending.get(self.NFTamountSending - 1)!!,
+        to: self.myNFTs.get(self.NFTamount)!!,
         value: ton("0.07"),
-        mode: 0,
+        mode: 2,
         bounce: true,
         body: Transfer {
           queryId: msg.queryId,
           newOwner: self.owner,
           responseDestination: self.owner,
           customPayload: null,
-          forwardAmount: ton("0.1"),
+          forwardAmount: 0,
           forwardPayload: emptySlice() 
         }.toCell()
       });
-      self.NFTamountSending = self.NFTamountSending - 1;
+      self.myNFTs.set(self.NFTamount, null);
     }
-    if (self.NFTamountSending != 0) {
+    if (self.NFTamount != 0) {
       send(SendParameters{
         to: myAddress(),
         value: 0,
