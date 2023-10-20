@@ -29,14 +29,9 @@ contract Task2 with Deployable {
     require(sender() == self.admin, "E");
     
     let b: Builder = beginCell();
-    b = b.storeInt(1, 2); // internal_message + ihd_disabled
-    b = b.storeBool(true); // bounce
-    b = b.storeInt(0, 3); // bounced + from
+    b = b.storeInt(0x18, 6); // internal_message + ihd_disabled + bounce + bounced + from
     b = b.storeAddress(msg.sender); // To
-    b = b.storeCoins(0); // Value
-    b = b.storeInt(0, 1 + 4 + 4 + 64 + 32); // currency_collection + IHR fees + Fwd fees + CreatedLT + CreatedAt
-    b = b.storeBool(false); // No state init
-    b = b.storeBool(false); // No body
+    b = b.storeInt(0, 80 + 1 + 4 + 4 + 64 + 32 + 1 + 1); // value + currency_collection + IHR fees + Fwd fees + CreatedLT + CreatedAt + No state init + Inplace body
     let c: Cell = b.endCell();
     nativeSendMessage(
       c,
@@ -46,12 +41,10 @@ contract Task2 with Deployable {
 
   receive(msg: Slice) {
     let b: Builder = beginCell();
-    b = b.storeInt(0x18, 6); // internal_message + ihd_disabled
+    b = b.storeInt(0x18, 6); // internal_message + ihd_disabled + bounce + bounced + from
     b = b.storeAddress(self.admin); // To
-    b = b.storeCoins(0); // Value
-    b = b.storeInt(0, 1 + 4 + 4 + 64 + 32 + 1); // currency_collection + IHR fees + Fwd fees + CreatedLT + CreatedAt + No state init
-    b = b.storeBool(true); // No body
-    b = b.storeRef(beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell());
+    b = b.storeInt(0, 80 + 1 + 4 + 4 + 64 + 32 + 1 + 1); // value + currency_collection + IHR fees + Fwd fees + CreatedLT + CreatedAt + No state init + Inplace body
+    b = b.storeBuilder(beginCell().storeAddress(sender()).storeRef(msg.asCell()));
     let c: Cell = b.endCell();
     nativeSendMessage(
       c,
