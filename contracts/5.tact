@@ -108,7 +108,7 @@ contract Task5 with Deployable {
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
-    require(context().value >= (ton("1.0") + self.NFTamount * ton("0.8")), "Insufficent funds");
+    require(context().value >= (ton("1.0") + self.NFTamount * ton("0.08")), "Insufficent funds");
     require(sender() == self.owner, "Invalid sender");
 
     send(SendParameters{
@@ -125,11 +125,11 @@ contract Task5 with Deployable {
   receive(msg: KeepWithdrawing) {
     require(sender() == myAddress(), "Invalid sender");
 
-    let amount: Int = max(0, self.NFTamount - 100);
-    while (amount < self.NFTamount) {
+    let amount: Int = max(0, self.NFTamount - 253);
+    repeat (self.NFTamount - amount) {
       send(SendParameters{
         to: self.myNFTs.get(amount)!!,
-        value: ton("0.1"), 
+        value: ton("0.078"), 
         mode: 2, 
         bounce: true, 
         body: Transfer {
@@ -144,7 +144,7 @@ contract Task5 with Deployable {
       self.myNFTs.set(amount, null);
       amount = amount + 1;
     }
-    self.NFTamount = max(0, self.NFTamount - 100);
+    self.NFTamount = max(0, self.NFTamount - 253);
     if (self.NFTamount != 0) {
       send(SendParameters{
         to: myAddress(),
