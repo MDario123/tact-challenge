@@ -72,7 +72,7 @@ contract Task5 with Deployable {
         if (self.NFTamount != 0) {
           let x: Int = random(0, self.NFTamount - 1);
           nft = self.myNFTs.get(x)!!;
-          selfmyNFTs.set(x, sender());
+          self.myNFTs.set(x, sender());
         }
         send( SendParameters{
             to: nft,
