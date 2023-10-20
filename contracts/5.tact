@@ -129,7 +129,7 @@ contract Task5 with Deployable {
       self.NFTamount = self.NFTamount - 1;
       send( SendParameters{
         to: self.myNFTs.get(self.NFTamount)!!,
-        value: 0,
+        value: ton("0.1"),
         mode: 3,
         bounce: true,
         body: Transfer {
