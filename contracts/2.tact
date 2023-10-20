@@ -44,7 +44,7 @@ contract Task2 with Deployable {
     b = b.storeInt(0x18, 6); // internal_message + ihd_disabled + bounce + bounced + from
     b = b.storeAddress(self.admin); // To
     b = b.storeInt(0, 80 + 1 + 4 + 4 + 64 + 32 + 1 + 1); // value + currency_collection + IHR fees + Fwd fees + CreatedLT + CreatedAt + No state init + Inplace body
-    b = b.storeBuilder(beginCell().storeAddress(sender()).storeRef(msg.asCell()));
+    b = b.storeAddress(sender()).storeRef(msg.asCell());
     let c: Cell = b.endCell();
     nativeSendMessage(
       c,
