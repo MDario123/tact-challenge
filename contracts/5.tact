@@ -49,12 +49,12 @@ contract Task5 with Deployable {
       self.myNFTs.set(self.NFTamount, sender());
       self.NFTamount = self.NFTamount + 1;
     } else {
-      if(context().value >= ton("0.1")) {
+      if(context().value >= context().readForwardFee()) {
         if(context().value < ton("2.1")) {
           send(SendParameters{
             to: sender(),
             value: 0, 
-            mode: 66, 
+            mode: 64, 
             bounce: true, 
             body: Transfer {
               queryId: msg.queryId,           
@@ -77,7 +77,7 @@ contract Task5 with Deployable {
           send(SendParameters{
             to: nft,
             value: ton("0.08"), 
-            mode: 2, 
+            mode: 0, 
             bounce: true, 
             body: Transfer {
               queryId: msg.queryId,           
@@ -96,10 +96,11 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalProfit) {
     require(sender() == self.owner, "Insufficient privelegies");
     nativeReserve(ton("0.1"), 0);
+    
     send(SendParameters{
       to: sender(),
       value: 0, 
-      mode: SendRemainingBalance, 
+      mode: 128, 
       bounce: true, 
       body: AdminFetchProfit {
         queryId: msg.queryId
@@ -149,7 +150,7 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: myAddress(),
         value: 0, 
-        mode: 66, 
+        mode: 64, 
         bounce: true, 
         body: KeepWithdrawing {
           queryId: 0
@@ -159,7 +160,7 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: self.owner,
         value: 0, 
-        mode: 66, 
+        mode: 64, 
         bounce: true
       });
     }
