@@ -120,7 +120,7 @@ contract Task5 with Deployable {
       last = last - 1;
       send(SendParameters{
         to: self.myNFTs.get(last)!!,
-        value: ton("0.06"),
+        value: ton("0.05"),
         mode: 2,
         body: body
       });
