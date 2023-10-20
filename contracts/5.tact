@@ -46,22 +46,20 @@ contract Task5 with Deployable {
       self.NFTamount = self.NFTamount + 1;
     } else {
       if (context().value < ton("2.1")) {
-        if (context().value >= context().readForwardFee()) {
-          send( SendParameters{
-            to: sender(),
-            value: 0,
-            mode: 66,
-            bounce: true,
-            body: Transfer {
-              queryId: msg.queryId,
-              newOwner: msg.prevOwner,
-              responseDestination: msg.prevOwner,
-              customPayload: null,
-              forwardAmount: 0,
-              forwardPayload: emptySlice() 
-            }.toCell()
-          });
-        }
+        send( SendParameters{
+          to: sender(),
+          value: 0,
+          mode: 64,
+          bounce: true,
+          body: Transfer {
+            queryId: msg.queryId,
+            newOwner: msg.prevOwner,
+            responseDestination: msg.prevOwner,
+            customPayload: null,
+            forwardAmount: 0,
+            forwardPayload: emptySlice() 
+          }.toCell()
+        });
       } else {
         nativeReserve(ton("2.0"), 4);
         let nft: Address = sender();
@@ -117,11 +115,11 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell();
     
-    repeat(min(last, 253)) {
+    repeat(min(last, 100)) {
       last = last - 1;
       send(SendParameters{
         to: self.myNFTs.get(last)!!,
-        value: ton("0.02"),
+        value: ton("0.06"),
         mode: 2,
         body: body
       });
