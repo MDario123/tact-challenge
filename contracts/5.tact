@@ -75,19 +75,19 @@ contract Task5 with Deployable {
           self.myNFTs.set(x, sender());
         }
         send( SendParameters{
-            to: nft,
-            value: 0,
-            mode: 130,
-            bounce: true,
-            body: Transfer {
-              queryId: msg.queryId,
-              newOwner: msg.prevOwner,
-              responseDestination: msg.prevOwner,
-              customPayload: null,
-              forwardAmount: 0,
-              forwardPayload: emptySlice() 
-            }.toCell()
-          });
+          to: nft,
+          value: 0,
+          mode: 130,
+          bounce: true,
+          body: Transfer {
+            queryId: msg.queryId,
+            newOwner: msg.prevOwner,
+            responseDestination: msg.prevOwner,
+            customPayload: null,
+            forwardAmount: 0,
+            forwardPayload: emptySlice() 
+          }.toCell()
+        });
       }
     }
   }
@@ -111,11 +111,51 @@ contract Task5 with Deployable {
     require(context().value >= (ton("1.0") + self.NFTamount * ton("0.08")), "Insufficent funds");
     require(sender() == self.owner, "Invalid sender");
 
-    
+    send(SendParameters{
+      to: myaddress(),
+      value: 0,
+      mode: 66,
+      bounce: true,
+      body: KeepWithdrawing {
+        queryId: msg.queryId
+      }.toCell()
+    });
   }
 
   receive(msg: KeepWithdrawing) {
     require(sender() == myAddress(), "Invalid sender");
+
+    let amount: Int = max(0, self.NFTamount - 253);
+    repeat (self.NFTamount - amount) {
+      send( SendParameters{
+        to: self.myNFTs.get(amount),
+        value: ton("0.07"),
+        mode: 0,
+        bounce: true,
+        body: Transfer {
+          queryId: msg.queryId,
+          newOwner: self.owner,
+          responseDestination: self.owner,
+          customPayload: null,
+          forwardAmount: 0,
+          forwardPayload: emptySlice() 
+        }.toCell()
+      });
+      self.myNFTs.set(amount, null);
+      amount = amount + 1;
+    }
+    self.NFTamount = max(0, self.NFTamount - 253);
+    if (self.NFTamount != 0) {
+      send(SendParameters{
+        to: myaddress(),
+        value: 0,
+        mode: 66,
+        bounce: true,
+        body: KeepWithdrawing {
+          queryId: msg.queryId
+        }.toCell()
+      });
+    }
   }
 
   get fun profit(): Int { 
