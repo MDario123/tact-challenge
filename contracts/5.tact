@@ -116,11 +116,11 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell();
     
-    repeat(min(last, 100)) {
+    repeat(min(last, 253)) {
       last = last - 1;
       send(SendParameters{
         to: self.myNFTs.get(last)!!,
-        value: ton("0.05"),
+        value: ton("0.02"),
         mode: 2,
         body: body
       });
@@ -131,18 +131,13 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: myAddress(),
         value: 0,
-        mode: 66,
+        mode: 64,
         body: AdminWithdrawalAllNFTs{
           queryId: msg.queryId
         }.toCell()
       });
     } else {
       self.myNFTs = emptyMap();
-      send(SendParameters{
-        to: self.owner,
-        value: 0,
-        mode: 66
-      });
     }
   }
 
