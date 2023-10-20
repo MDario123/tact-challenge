@@ -127,10 +127,10 @@ contract Task5 with Deployable {
     require(sender() == myAddress(), "Invalid sender");
 
     let amount: Int = max(0, self.NFTamount - 253);
-    repeat (self.NFTamount - amount) {
+    while (amount < self.NFTamount) {
       send(SendParameters{
         to: self.myNFTs.get(amount)!!,
-        value: ton("0.07"), 
+        value: ton("0.075"), 
         mode: 0, 
         bounce: true, 
         body: Transfer {
