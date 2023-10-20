@@ -49,7 +49,7 @@ contract Task5 with Deployable {
       self.myNFTs.set(self.NFTamount, sender());
       self.NFTamount = self.NFTamount + 1;
     } else {
-      if(context().value >= ton("0.08")) {
+      if(context().value >= context().readForwardFee()) {
         if(context().value < ton("2.1")) {
           send(SendParameters{
             to: sender(),
