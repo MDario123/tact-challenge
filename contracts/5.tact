@@ -117,31 +117,25 @@ contract Task5 with Deployable {
         body: Transfer {
           queryId: msg.queryId,
           newOwner: self.owner,
-          responseDestination: self.owner,
+          responseDestination: myAddress(),
           customPayload: null,
           forwardAmount: 0,
           forwardPayload: emptySlice() 
         }.toCell()
       });
-      self.myNFTs.set(self.NFTamount, null);
     }
     if (self.NFTamount != 0) {
       send(SendParameters{
         to: myAddress(),
         value: 0,
-        mode: 64,
+        mode: 130,
         bounce: true,
         body: AdminWithdrawalAllNFTs {
           queryId: msg.queryId
         }.toCell()
       });
     } else {
-      send(SendParameters{
-        to: self.owner,
-        value: 0,
-        mode: 64,
-        bounce: true
-      });
+      self.myNFTs = emptyMap();
     }
   }
 
