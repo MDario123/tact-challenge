@@ -46,6 +46,7 @@ contract Task5 with Deployable {
       self.NFTamount = self.NFTamount + 1;
     } else {
       if (context().value < ton("2.1")) {
+        nativeReserve(0, 4);
         send( SendParameters{
           to: sender(),
           value: 0,
