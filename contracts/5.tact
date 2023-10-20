@@ -48,7 +48,7 @@ contract Task5 with Deployable {
     self.NFTamount = 0;
     self.sending = false;
     self.NFTsending = emptyMap();
-    NFTamountSending = 0;
+    self.NFTamountSending = 0;
   }
 
   receive(msg: OwnershipAssigned) {
