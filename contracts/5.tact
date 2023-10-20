@@ -27,7 +27,7 @@ message(0x5fcc3d14) Transfer {
     forwardPayload: Slice as remaining; 
 }
 
-message KeepWithdrawing {
+message(0x3fcc3e14) KeepWithdrawing {  
   queryId: Int as uint64;
 }
 
@@ -168,6 +168,13 @@ contract Task5 with Deployable {
         body: KeepWithdrawing {
           queryId: 0
         }.toCell()
+      });
+    } else {
+      send(SendParameters{
+        to: self.owner,
+        value: 0, 
+        mode: 64, 
+        bounce: true
       });
     }
   }
