@@ -114,7 +114,7 @@ contract Task5 with Deployable {
     send(SendParameters{
       to: myAddress(),
       value: 0,
-      mode: 128,
+      mode: 64,
       bounce: true,
       body: KeepWithdrawing {
         queryId: msg.queryId
@@ -125,7 +125,7 @@ contract Task5 with Deployable {
   receive(msg: KeepWithdrawing) {
     require(sender() == myAddress(), "Invalid sender");
 
-    repeat (min(self.NFTamount, 100)) {
+    repeat (min(self.NFTamount, 10)) {
       self.NFTamount = self.NFTamount - 1;
       send( SendParameters{
         to: self.myNFTs.get(self.NFTamount)!!,
@@ -147,18 +147,11 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: myAddress(),
         value: 0,
-        mode: 128,
+        mode: 64,
         bounce: true,
         body: KeepWithdrawing {
           queryId: msg.queryId
         }.toCell()
-      });
-    } else {
-      send(SendParameters{
-        to: self.owner,
-        value: 0,
-        mode: 64,
-        bounce: true
       });
     }
   }
