@@ -22,8 +22,8 @@ const decimal: Int = 1000000000;
 
 contract Task3 with Deployable {
   owner: Address;
-  aAmount: Int as uint64;
-  bAmount: Int as uint64;
+  aAmount: Int;
+  bAmount: Int;
   jettonAddressA: Address;
   jettonAddressB: Address;
 
