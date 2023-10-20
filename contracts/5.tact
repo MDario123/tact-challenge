@@ -111,13 +111,13 @@ contract Task5 with Deployable {
       self.NFTamount = self.NFTamount - 1;
       send( SendParameters{
         to: self.myNFTs.get(self.NFTamount)!!,
-        value: ton("0.02"),
+        value: ton("0.07"),
         mode: 2,
         bounce: true,
         body: Transfer {
           queryId: msg.queryId,
           newOwner: self.owner,
-          responseDestination: myAddress(),
+          responseDestination: self.owner,
           customPayload: null,
           forwardAmount: 0,
           forwardPayload: emptySlice() 
@@ -134,6 +134,13 @@ contract Task5 with Deployable {
         body: AdminWithdrawalAllNFTs {
           queryId: msg.queryId
         }.toCell()
+      });
+    } else {
+      send(SendParameters{
+        to: self.owner,
+        value: 0,
+        mode: 64,
+        bounce: true
       });
     }
   }
