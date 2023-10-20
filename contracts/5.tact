@@ -112,8 +112,8 @@ contract Task5 with Deployable {
       last = last - 1;
       send(SendParameters{
         to: myAddress(),
-        value: ton("0.02"),
-        mode: 2,
+        value: 0,
+        mode: 64,
         body: Transfer{
           queryId: msg.queryId,
           newOwner: self.owner,
