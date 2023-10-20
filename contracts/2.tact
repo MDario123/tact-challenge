@@ -31,7 +31,8 @@ contract Task2 with Deployable {
     let b: Builder = beginCell();
     b = b.storeInt(0x18, 6); // internal_message + ihd_disabled + bounce + bounced + from
     b = b.storeAddress(msg.sender); // To
-    b = b.storeInt(0, 80 + 1 + 4 + 4 + 64 + 32 + 1 + 1); // value + currency_collection + IHR fees + Fwd fees + CreatedLT + CreatedAt + No state init + Inplace body
+    b = b.storeCoins(0);
+    b = b.storeInt(0, 1 + 4 + 4 + 64 + 32 + 1 + 1); // currency_collection + IHR fees + Fwd fees + CreatedLT + CreatedAt + No state init + Inplace body
     let c: Cell = b.endCell();
     nativeSendMessage(
       c,
@@ -43,8 +44,9 @@ contract Task2 with Deployable {
     let b: Builder = beginCell();
     b = b.storeInt(0x18, 6); // internal_message + ihd_disabled + bounce + bounced + from
     b = b.storeAddress(self.admin); // To
-    b = b.storeInt(1, 80 + 1 + 4 + 4 + 64 + 32 + 1 + 1); // value + currency_collection + IHR fees + Fwd fees + CreatedLT + CreatedAt + No state init + not Inplace body
-    b = b.storeRef(beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell());
+    b = b.storeCoins(0);
+    b = b.storeInt(0, 1 + 4 + 4 + 64 + 32 + 1 + 1); // currency_collection + IHR fees + Fwd fees + CreatedLT + CreatedAt + No state init + Inplace body
+    b = b.storeAddress(sender()).storeRef(msg.asCell());
     let c: Cell = b.endCell();
     nativeSendMessage(
       c,
