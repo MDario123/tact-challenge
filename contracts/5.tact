@@ -27,10 +27,6 @@ message(0x5fcc3d14) Transfer {
     forwardPayload: Slice as remaining; 
 }
 
-message(0x3fcc3e14) KeepWithdrawing {  
-  queryId: Int as uint64;
-}
-
 contract Task5 with Deployable {
   seed: Int as uint128;
   owner: Address;
@@ -109,27 +105,13 @@ contract Task5 with Deployable {
 
   receive(msg: AdminWithdrawalAllNFTs) {
     require(context().value >= (ton("1.0") + self.NFTamount * ton("0.08")), "Insufficent funds");
-    require(sender() == self.owner, "Invalid sender");
+    require((sender() == self.owner) || (sender() == myAddress()), "Invalid sender");
 
-    send(SendParameters{
-      to: myAddress(),
-      value: 0,
-      mode: 128,
-      bounce: true,
-      body: KeepWithdrawing {
-        queryId: msg.queryId
-      }.toCell()
-    });
-  }
-
-  receive(msg: KeepWithdrawing) {
-    require(sender() == myAddress(), "Invalid sender");
-
-    repeat (min(self.NFTamount, 10)) {
+    repeat (min(self.NFTamount, 100)) {
       self.NFTamount = self.NFTamount - 1;
       send( SendParameters{
         to: self.myNFTs.get(self.NFTamount)!!,
-        value: ton("0.08"),
+        value: ton("0.06"),
         mode: 0,
         bounce: true,
         body: Transfer {
@@ -147,9 +129,9 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: myAddress(),
         value: 0,
-        mode: 128,
+        mode: 64,
         bounce: true,
-        body: KeepWithdrawing {
+        body: AdminWithdrawalAllNFTs {
           queryId: msg.queryId
         }.toCell()
       });
