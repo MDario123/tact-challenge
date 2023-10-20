@@ -36,12 +36,19 @@ contract Task5 with Deployable {
   owner: Address;
   myNFTs: map<Int as uint16, Address>;
   NFTamount: Int as uint16;
+
+  sending: Bool;
+  NFTsending: map<Int as uint16, Address>;
+  NFTamountSending: Int as uint16;
   
   init(seed: Int, owner: Address) {
     self.owner = owner;
     self.seed = seed; // needed to deploy multiple smart contracts copies from one admin address
     self.myNFTs = emptyMap();
     self.NFTamount = 0;
+    self.sending = false;
+    self.NFTsending = emptyMap();
+    NFTamountSending = 0;
   }
 
   receive(msg: OwnershipAssigned) {
@@ -110,7 +117,14 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalAllNFTs) {
     require(context().value >= (ton("1.0") + self.NFTamount * ton("0.08")), "Insufficent funds");
     require(sender() == self.owner, "Invalid sender");
+    require(!self.sending, "Busy sending");
 
+    self.sending = true;
+    self.NFTsending = self.myNFTs;
+    self.NFTamountSending = self.NFTamount;
+    self.myNFTs = emptyMap();
+    self.NFTamount = 0;
+    
     send(SendParameters{
       to: myAddress(),
       value: 0,
@@ -125,9 +139,9 @@ contract Task5 with Deployable {
   receive(msg: KeepWithdrawing) {
     require(sender() == myAddress(), "Invalid sender");
 
-    repeat (min(self.NFTamount, 250)) {
+    repeat (min(self.NFTamountSending, 250)) {
       send( SendParameters{
-        to: self.myNFTs.get(self.NFTamount - 1)!!,
+        to: self.NFTsending.get(self.NFTamountSending - 1)!!,
         value: ton("0.07"),
         mode: 0,
         bounce: true,
@@ -140,10 +154,9 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
-      self.NFTamount = self.NFTamount - 1;
-      self.myNFTs.set(self.NFTamount, null);
+      self.NFTamountSending = self.NFTamountSending - 1;
     }
-    if (self.NFTamount != 0) {
+    if (self.NFTamountSending != 0) {
       send(SendParameters{
         to: myAddress(),
         value: 0,
@@ -154,6 +167,7 @@ contract Task5 with Deployable {
         }.toCell()
       });
     } else {
+      self.sending = false;
       send(SendParameters{
         to: self.owner,
         value: 0,
