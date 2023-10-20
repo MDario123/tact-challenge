@@ -108,11 +108,11 @@ contract Task5 with Deployable {
     require((sender() == self.owner) || (sender() == myAddress()), "Invalid sender");
 
     let last: Int = self.NFTamount;
-    repeat(min(last, 100)) {
+    repeat(min(last, 10)) {
       last = last - 1;
       send(SendParameters{
         to: myAddress(),
-        value: ton("0.07"),
+        value: ton("0.09"),
         mode: 2,
         body: Transfer{
           queryId: msg.queryId,
