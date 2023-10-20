@@ -29,7 +29,7 @@ contract Task2 with Deployable {
     require(sender() == self.admin, "E");
     nativeSendMessage(
       beginCell()
-        .storeInt(0x10, 2) // internal_message + ihd_disabled + bounce + bounce
+        .storeUint(0x20, 6) // internal_message + ihd_disabled + bounce + bounced
         .storeAddress(msg.sender)
         .storeCoins(0)
         .storeInt(0, 1 + 4 + 4 + 64 + 32 + 2)
