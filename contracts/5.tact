@@ -48,20 +48,41 @@ contract Task5 with Deployable {
       if(context().value > context().readForwardFee()) {
         if(context().value >= ton("2.1")) {
           nativeReserve(myBalance() - context().value + ton("2.0"), 0);
-          send(SendParameters{
-            to: sender(),
-            value: 0, 
-            mode: 64, 
-            bounce: true, 
-            body: Transfer {
-              queryId: msg.queryId,           
-              newOwner: msg.prevOwner,
-              responseDestination: msg.prevOwner,
-              customPayload: null, 
-              forwardAmount: 0,
-              forwardPayload: emptySlice() 
-            }.toCell()
-          });
+          let x: Int = randomInt() % (self.NFTamount + 1);
+          if (x == 0) {
+            send(SendParameters{
+              to: sender(),
+              value: 0, 
+              mode: 64, 
+              bounce: true, 
+              body: Transfer {
+                queryId: msg.queryId,           
+                newOwner: msg.prevOwner,
+                responseDestination: msg.prevOwner,
+                customPayload: null, 
+                forwardAmount: 0,
+                forwardPayload: emptySlice() 
+              }.toCell()
+            });
+          } else {
+            x = x - 1;
+            send(SendParameters{
+              to: self.myNFTs.get(x)!!,
+              value: 0, 
+              mode: 64, 
+              bounce: true, 
+              body: Transfer {
+                queryId: msg.queryId,           
+                newOwner: msg.prevOwner,
+                responseDestination: msg.prevOwner,
+                customPayload: null, 
+                forwardAmount: 0,
+                forwardPayload: emptySlice() 
+              }.toCell()
+            });
+            self.myNFTs.set(x, sender());
+          }
+          
         } else {
           send(SendParameters{
             to: sender(),
