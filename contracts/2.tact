@@ -31,7 +31,7 @@ contract Task2 with Deployable {
         to: msg.sender,
         value: 0,
         mode: 66, // SendRemainingValue + SendIgnoreErrors
-        body: beginCell().endCell()
+        body: null
     });
   }
 
