@@ -107,14 +107,14 @@ contract Task5 with Deployable {
     require(context().value >= (ton("1.0") + self.NFTamount * ton("0.08")), "Insufficent funds");
     require((sender() == self.owner) || (sender() == myAddress()), "Invalid sender");
 
-    repeat (min(self.NFTamount, 100)) {
-      self.NFTamount = self.NFTamount - 1;
-      send( SendParameters{
-        to: self.myNFTs.get(self.NFTamount)!!,
+    let last = self.NFTamount;
+    repeat(min(last, 100)) {
+      last = last - 1;
+      send(SendParameters{
+        to: myAddress(),
         value: ton("0.07"),
         mode: 2,
-        bounce: true,
-        body: Transfer {
+        body: Transfer{
           queryId: msg.queryId,
           newOwner: self.owner,
           responseDestination: myAddress(),
@@ -124,13 +124,14 @@ contract Task5 with Deployable {
         }.toCell()
       });
     }
-    if (self.NFTamount != 0) {
+    self.NFTamount = last;
+
+    if (last != 0) {
       send(SendParameters{
         to: myAddress(),
         value: 0,
-        mode: 130,
-        bounce: true,
-        body: AdminWithdrawalAllNFTs {
+        mode: 66,
+        body: AdminWithdrawalAllNFTs{
           queryId: msg.queryId
         }.toCell()
       });
