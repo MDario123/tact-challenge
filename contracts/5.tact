@@ -108,20 +108,22 @@ contract Task5 with Deployable {
     require((sender() == self.owner) || (sender() == myAddress()), "Invalid sender");
 
     let last: Int = self.NFTamount;
-    repeat(min(last, 253)) {
-      last = last - 1;
-      send(SendParameters{
-        to: self.myNFTs.get(last)!!,
-        value: ton("0.02"),
-        mode: 2,
-        body: Transfer{
+    let body: Cell = Transfer{
           queryId: msg.queryId,
           newOwner: self.owner,
           responseDestination: myAddress(),
           customPayload: null,
           forwardAmount: 0,
           forwardPayload: emptySlice() 
-        }.toCell()
+        }.toCell();
+    
+    repeat(min(last, 253)) {
+      last = last - 1;
+      send(SendParameters{
+        to: self.myNFTs.get(last)!!,
+        value: ton("0.02"),
+        mode: 2,
+        body: body
       });
     }
     self.NFTamount = last;
