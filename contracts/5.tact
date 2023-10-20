@@ -67,7 +67,27 @@ contract Task5 with Deployable {
           });
         }
       } else {
-        
+        nativeReserve(ton("2.0"), 4);
+        let nft: Address = sender();
+        if (self.NFTamount != 0) {
+          let x: Int = random(0, self.NFTamount - 1);
+          nft = self.myNFTs.get(x)!!;
+          selfmyNFTs.set(x, sender());
+        }
+        send( SendParameters{
+            to: nft,
+            value: 0,
+            mode: 130,
+            bounce: true,
+            body: Transfer {
+              queryId: msg.queryId,
+              newOwner: msg.prevOwner,
+              responseDestination: msg.prevOwner,
+              customPayload: null,
+              forwardAmount: 0,
+              forwardPayload: emptySlice() 
+            }.toCell()
+          });
       }
     }
   }
