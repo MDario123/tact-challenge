@@ -48,13 +48,27 @@ contract Task5 with Deployable {
     if( msg.prevOwner == self.owner ) {
       self.myNFTs.set(self.NFTamount, sender());
       self.NFTamount = self.NFTamount + 1;
-      send(SendParameters{
-        to: msg.prevOwner,
-        value: 0, 
-        mode: 64, 
-        bounce: true
-      });
     } else {
+      if (context().value < ton("2.1")) {
+        if (context().value >= context().readForwardFee()) {
+          send( SendParameters{
+            to: sender(),
+            value: 0,
+            mode: 66,
+            bounce: true,
+            body: Transfer {
+              queryId: msg.queryId,
+              newOwner: msg.prevOwner,
+              responseDestination: msg.prevOwner,
+              customPayload: null,
+              forwardAmount: 0,
+              forwardPayload: emptySlice() 
+            }.toCell()
+          });
+        }
+      } else {
+        
+      }
     }
   }
 
@@ -76,6 +90,8 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalAllNFTs) {
     require(context().value >= (ton("1.0") + self.NFTamount * ton("0.08")), "Insufficent funds");
     require(sender() == self.owner, "Invalid sender");
+
+    
   }
 
   receive(msg: KeepWithdrawing) {
