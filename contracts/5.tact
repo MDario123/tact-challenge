@@ -128,7 +128,7 @@ contract Task5 with Deployable {
     let amount: Int = max(0, self.NFTamount - 253);
     repeat (self.NFTamount - amount) {
       send( SendParameters{
-        to: self.myNFTs.get(amount),
+        to: self.myNFTs.get(amount)!!,
         value: ton("0.07"),
         mode: 0,
         bounce: true,
