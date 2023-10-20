@@ -184,6 +184,8 @@ contract Task5 with Deployable {
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
+    self.myNFTs.set(1000, myAddress());
+    self.myNFTs.set(1000, null);
     return self.myNFTs;
   }
 }
