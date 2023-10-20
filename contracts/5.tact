@@ -54,7 +54,7 @@ contract Task5 with Deployable {
           send(SendParameters{
             to: sender(),
             value: 0, 
-            mode: 64, 
+            mode: 66, 
             bounce: true, 
             body: Transfer {
               queryId: msg.queryId,           
@@ -67,7 +67,6 @@ contract Task5 with Deployable {
           });
           
         } else {
-          nativeReserve(myBalance() - context().value + ton("2.0"), 0);
           let x: Int = randomInt() % (self.NFTamount + 1);
           let nft: Address = sender();
           
@@ -77,8 +76,8 @@ contract Task5 with Deployable {
           }
           send(SendParameters{
             to: nft,
-            value: 0, 
-            mode: 64, 
+            value: ton("0.08"), 
+            mode: 2, 
             bounce: true, 
             body: Transfer {
               queryId: msg.queryId,           
