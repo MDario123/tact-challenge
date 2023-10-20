@@ -46,7 +46,7 @@ contract Task5 with Deployable {
       self.NFTamount = self.NFTamount + 1;
     } else {
       if (context().value < ton("2.1")) {
-        //if (context().value >= 2*context().readForwardFee()) {
+        if (context().value >= ton("0.08")) {
           send( SendParameters{
             to: sender(),
             value: 0,
@@ -61,7 +61,7 @@ contract Task5 with Deployable {
               forwardPayload: emptySlice() 
             }.toCell()
           });
-        //}
+        }
       } else {
         nativeReserve(ton("2.0"), 4);
         let nft: Address = sender();
