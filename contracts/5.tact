@@ -114,7 +114,7 @@ contract Task5 with Deployable {
     send(SendParameters{
       to: myAddress(),
       value: 0,
-      mode: 64,
+      mode: 128,
       bounce: true,
       body: KeepWithdrawing {
         queryId: msg.queryId
@@ -147,7 +147,7 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: myAddress(),
         value: 0,
-        mode: 64,
+        mode: 128,
         bounce: true,
         body: KeepWithdrawing {
           queryId: msg.queryId
