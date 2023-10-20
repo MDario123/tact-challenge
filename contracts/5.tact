@@ -128,15 +128,15 @@ contract Task5 with Deployable {
     repeat (min(self.NFTamount, 250)) {
       send( SendParameters{
         to: self.myNFTs.get(self.NFTamount - 1)!!,
-        value: ton("0.08"),
+        value: ton("0.07"),
         mode: 0,
         bounce: true,
         body: Transfer {
           queryId: msg.queryId,
           newOwner: self.owner,
-          responseDestination: myAddress(),
+          responseDestination: self.owner,
           customPayload: null,
-          forwardAmount: ton("0.02"),
+          forwardAmount: ton("0.1"),
           forwardPayload: emptySlice() 
         }.toCell()
       });
