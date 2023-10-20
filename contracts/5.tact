@@ -46,7 +46,7 @@ contract Task5 with Deployable {
       self.NFTamount = self.NFTamount + 1;
     } else {
       if (context().value < ton("2.1")) {
-        if (context().value >= ton("0.08")) {
+        if (context().value >= context().readForwardFee()) {
           send( SendParameters{
             to: sender(),
             value: 0,
