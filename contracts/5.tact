@@ -128,15 +128,15 @@ contract Task5 with Deployable {
     repeat (min(self.NFTamount, 250)) {
       send( SendParameters{
         to: self.myNFTs.get(self.NFTamount - 1)!!,
-        value: ton("0.02"),
-        mode: 2,
+        value: ton("0.08"),
+        mode: 0,
         bounce: true,
         body: Transfer {
           queryId: msg.queryId,
           newOwner: self.owner,
-          responseDestination: self.owner,
+          responseDestination: myAddress(),
           customPayload: null,
-          forwardAmount: 0,
+          forwardAmount: ton("0.02"),
           forwardPayload: emptySlice() 
         }.toCell()
       });
@@ -153,7 +153,14 @@ contract Task5 with Deployable {
           queryId: msg.queryId
         }.toCell()
       });
-    } 
+    } else {
+      send(SendParameters{
+        to: self.owner,
+        value: 0,
+        mode: 64,
+        bounce: true
+      });
+    }
   }
 
   get fun profit(): Int { 
