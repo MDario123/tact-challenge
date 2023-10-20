@@ -107,7 +107,7 @@ contract Task5 with Deployable {
     require(context().value >= (ton("1.0") + self.NFTamount * ton("0.08")), "Insufficent funds");
     require((sender() == self.owner) || (sender() == myAddress()), "Invalid sender");
 
-    let last = self.NFTamount;
+    let last: Int = self.NFTamount;
     repeat(min(last, 100)) {
       last = last - 1;
       send(SendParameters{
