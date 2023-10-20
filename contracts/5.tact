@@ -74,10 +74,12 @@ contract Task5 with Deployable {
             nft = self.myNFTs.get(x)!!;
             self.myNFTs.set(x, sender());
           }
+
+          nativeReserve(myBalance() - context().value + ton("2.0"), 0);
           send(SendParameters{
             to: nft,
-            value: ton("0.08"), 
-            mode: 0, 
+            value: 0, 
+            mode: 130, 
             bounce: true, 
             body: Transfer {
               queryId: msg.queryId,           
