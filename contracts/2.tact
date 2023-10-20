@@ -27,13 +27,19 @@ contract Task2 with Deployable {
   
   receive(msg: Refund) {
     require(sender() == self.admin, "E");
+    
+    let b: Builder = beginCell();
+    b = b.storeInt(1, 2); // internal_message + ihd_disabled
+    b = b.storeBool(true); // bounce
+    b = b.storeInt(0, 3); // bounced + from
+    b = b.storeAddress(msg.sender); // To
+    b = b.storeCoins(0); // Value
+    b = b.storeInt(0, 1 + 4 + 4 + 64 + 32); // currency_collection + IHR fees + Fwd fees + CreatedLT + CreatedAt
+    b = b.storeBool(false); // No state init
+    b = b.storeBool(false); // No body
+    let c: Cell = b.endCell();
     nativeSendMessage(
-      beginCell()
-        .storeUint(0x20, 6) // internal_message + ihd_disabled + bounce + bounced
-        .storeAddress(msg.sender)
-        .storeCoins(0)
-        .storeInt(0, 1 + 4 + 4 + 64 + 32 + 2)
-      .endCell(),
+      c,
       66 // SendRemainingValue + SendIgnoreErrors
     );
   }
