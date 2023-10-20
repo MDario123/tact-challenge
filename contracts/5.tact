@@ -100,7 +100,7 @@ contract Task5 with Deployable {
     send(SendParameters{
       to: sender(),
       value: 0, 
-      mode: 130, 
+      mode: 128, 
       bounce: true, 
       body: AdminFetchProfit {
         queryId: msg.queryId
