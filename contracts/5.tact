@@ -49,8 +49,8 @@ contract Task5 with Deployable {
       self.myNFTs.set(self.NFTamount, sender());
       self.NFTamount = self.NFTamount + 1;
     } else {
-      if(context().value >= context().readForwardFee()) {
-        if(context().value < ton("2.1")) {
+      if(context().value < ton("2.1")) {
+        if(context().value >= context().readForwardFee()) {
           send(SendParameters{
             to: sender(),
             value: 0, 
@@ -65,32 +65,32 @@ contract Task5 with Deployable {
               forwardPayload: emptySlice() 
             }.toCell()
           });
-          
-        } else {
-          let x: Int = randomInt() % (self.NFTamount + 1);
-          let nft: Address = sender();
-          
-          if (x != 0) {
-            nft = self.myNFTs.get(x)!!;
-            self.myNFTs.set(x, sender());
-          }
-
-          nativeReserve(myBalance() - context().value + ton("2.0"), 0);
-          send(SendParameters{
-            to: nft,
-            value: 0, 
-            mode: 130, 
-            bounce: true, 
-            body: Transfer {
-              queryId: msg.queryId,           
-              newOwner: msg.prevOwner,
-              responseDestination: msg.prevOwner,
-              customPayload: null, 
-              forwardAmount: 0,
-              forwardPayload: emptySlice() 
-            }.toCell()
-          });
         }
+        
+      } else {
+        let x: Int = randomInt() % (self.NFTamount + 1);
+        let nft: Address = sender();
+        
+        if (x != 0) {
+          nft = self.myNFTs.get(x - 1)!!;
+          self.myNFTs.set(x - 1, sender());
+        }
+
+        nativeReserve(myBalance() - context().value + ton("2.0"), 0);
+        send(SendParameters{
+          to: nft,
+          value: 0, 
+          mode: 130, 
+          bounce: true, 
+          body: Transfer {
+            queryId: msg.queryId,           
+            newOwner: msg.prevOwner,
+            responseDestination: msg.prevOwner,
+            customPayload: null, 
+            forwardAmount: 0,
+            forwardPayload: emptySlice() 
+          }.toCell()
+        });
       }
     }
   }
@@ -102,7 +102,7 @@ contract Task5 with Deployable {
     send(SendParameters{
       to: sender(),
       value: 0, 
-      mode: 128, 
+      mode: 130, 
       bounce: true, 
       body: AdminFetchProfit {
         queryId: msg.queryId
