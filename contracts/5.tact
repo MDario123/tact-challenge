@@ -46,7 +46,7 @@ contract Task5 with Deployable {
       self.NFTamount = self.NFTamount + 1;
     } else {
       if (context().value < ton("2.1")) {
-        if (context().value >= context().readForwardFee()) {
+        if (context().value >= 2*context().readForwardFee()) {
           send( SendParameters{
             to: sender(),
             value: 0,
@@ -108,11 +108,11 @@ contract Task5 with Deployable {
     require((sender() == self.owner) || (sender() == myAddress()), "Invalid sender");
 
     let last: Int = self.NFTamount;
-    repeat(min(last, 10)) {
+    repeat(min(last, 100)) {
       last = last - 1;
       send(SendParameters{
         to: myAddress(),
-        value: ton("0.09"),
+        value: ton("0.02"),
         mode: 2,
         body: Transfer{
           queryId: msg.queryId,
