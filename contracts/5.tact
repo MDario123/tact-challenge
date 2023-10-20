@@ -110,7 +110,7 @@ contract Task5 with Deployable {
     let body: Cell = Transfer{
           queryId: msg.queryId,
           newOwner: self.owner,
-          responseDestination: myAddress(),
+          responseDestination: self.owner,
           customPayload: null,
           forwardAmount: 0,
           forwardPayload: emptySlice() 
@@ -138,6 +138,11 @@ contract Task5 with Deployable {
       });
     } else {
       self.myNFTs = emptyMap();
+      send(SendParameters{
+        to: self.owner,
+        value: 0,
+        mode: 66
+      });
     }
   }
 
