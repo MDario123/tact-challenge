@@ -111,9 +111,9 @@ contract Task5 with Deployable {
     repeat(min(last, 100)) {
       last = last - 1;
       send(SendParameters{
-        to: myAddress(),
-        value: 0,
-        mode: 64,
+        to: self.myNFTs.get(last)!!,
+        value: ton("0.02"),
+        mode: 0,
         body: Transfer{
           queryId: msg.queryId,
           newOwner: self.owner,
