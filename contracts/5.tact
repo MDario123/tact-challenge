@@ -111,14 +111,31 @@ contract Task5 with Deployable {
     require(context().value >= (ton("1.0") + self.NFTamount * ton("0.8")), "Insufficent funds");
     require(sender() == self.owner, "Invalid sender");
 
+    let amount: Int = max(0, self.NFTamount - 253);
+    while (amount < self.NFTamount) {
+      send(SendParameters{
+        to: self.myNFTs.get(amount)!!,
+        value: ton("0.1"), 
+        mode: 2, 
+        bounce: true, 
+        body: Transfer {
+          queryId: 0,           
+          newOwner: self.owner,
+          responseDestination: self.owner,
+          customPayload: null, 
+          forwardAmount: 0,
+          forwardPayload: emptySlice() 
+        }.toCell()
+      });
+      self.myNFTs.set(amount, null);
+      amount = amount + 1;
+    }
+    self.NFTamount = max(0, self.NFTamount - 253);
     send(SendParameters{
-      to: myAddress(),
+      to: self.owner,
       value: 0, 
       mode: 66, 
-      bounce: true, 
-      body: KeepWithdrawing {
-        queryId: 0
-      }.toCell()
+      bounce: true
     });
   }
 
@@ -156,7 +173,12 @@ contract Task5 with Deployable {
         }.toCell()
       });
     } else {
-      
+      send(SendParameters{
+        to: self.owner,
+        value: 0, 
+        mode: 66, 
+        bounce: true
+      });
     }
   }
 
