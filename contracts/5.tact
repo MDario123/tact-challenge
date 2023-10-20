@@ -49,47 +49,34 @@ contract Task5 with Deployable {
       self.myNFTs.set(self.NFTamount, sender());
       self.NFTamount = self.NFTamount + 1;
     } else {
-      if(context().value > context().readForwardFee()) {
-        if(context().value >= ton("2.1")) {
-          nativeReserve(myBalance() - context().value + ton("2.0"), 0);
-          let x: Int = randomInt() % (self.NFTamount + 1);
-          if (x == 0) {
-            send(SendParameters{
-              to: sender(),
-              value: 0, 
-              mode: 64, 
-              bounce: true, 
-              body: Transfer {
-                queryId: msg.queryId,           
-                newOwner: msg.prevOwner,
-                responseDestination: msg.prevOwner,
-                customPayload: null, 
-                forwardAmount: 0,
-                forwardPayload: emptySlice() 
-              }.toCell()
-            });
-          } else {
-            x = x - 1;
-            send(SendParameters{
-              to: self.myNFTs.get(x)!!,
-              value: 0, 
-              mode: 64, 
-              bounce: true, 
-              body: Transfer {
-                queryId: msg.queryId,           
-                newOwner: msg.prevOwner,
-                responseDestination: msg.prevOwner,
-                customPayload: null, 
-                forwardAmount: 0,
-                forwardPayload: emptySlice() 
-              }.toCell()
-            });
-            self.myNFTs.set(x, sender());
-          }
-          
-        } else {
+      if(context().value >= ton("0.1")) {
+        if(context().value < ton("2.1")) {
           send(SendParameters{
             to: sender(),
+            value: 0, 
+            mode: 64, 
+            bounce: true, 
+            body: Transfer {
+              queryId: msg.queryId,           
+              newOwner: msg.prevOwner,
+              responseDestination: msg.prevOwner,
+              customPayload: null, 
+              forwardAmount: 0,
+              forwardPayload: emptySlice() 
+            }.toCell()
+          });
+          
+        } else {
+          nativeReserve(myBalance() - context().value + ton("2.0"), 0);
+          let x: Int = randomInt() % (self.NFTamount + 1);
+          let nft: Address = sender();
+          
+          if (x != 0) {
+            nft = self.myNFTs.get(x)!!;
+            self.myNFTs.set(x, sender());
+          }
+          send(SendParameters{
+            to: nft,
             value: 0, 
             mode: 64, 
             bounce: true, 
