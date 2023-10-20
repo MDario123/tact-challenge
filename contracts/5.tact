@@ -112,7 +112,7 @@ contract Task5 with Deployable {
     require(sender() == self.owner, "Invalid sender");
 
     send(SendParameters{
-      to: myaddress(),
+      to: myAddress(),
       value: 0,
       mode: 66,
       bounce: true,
@@ -147,7 +147,7 @@ contract Task5 with Deployable {
     self.NFTamount = max(0, self.NFTamount - 253);
     if (self.NFTamount != 0) {
       send(SendParameters{
-        to: myaddress(),
+        to: myAddress(),
         value: 0,
         mode: 66,
         bounce: true,
